@@ -1,16 +1,16 @@
-//  Obtener canvas y contexto
+/// Obtener canvas y contexto
 let canvas = document.getElementById("areaJuego");
 let ctx = canvas.getContext("2d");
 
 // Elementos de control
-let btnarriba = document.getElementById("btnarriba");
-let btnizquierda = document.getElementById("btnizquierda");
-let btnabajo = document.getElementById("btnabajo");
-let btnderecha = document.getElementById("btnderecha");
+let btnArriba = document.getElementById("btnArriba");
+let btnIzquierda = document.getElementById("btnIzquierda");
+let btnAbajo = document.getElementById("btnAbajo");
+let btnDerecha = document.getElementById("btnDerecha");
 
 const VELOCIDAD = 10;
 
-//  Variables y constantes
+// Punto 16: Variables y constantes
 let gatoX = 0;
 let gatoY = 0;
 let comidaX = 0;
@@ -21,25 +21,69 @@ const ANCHO_GATO = 50;
 const ALTO_COMIDA = 30;
 const ANCHO_COMIDA = 30;
 
-//  Función graficarRectangulo
+// Variable para controlar puntuación
+let puntos = 0;
+
+// Función graficarRectangulo
 function graficarRectangulo(x, y, ancho, alto, color) {
     ctx.fillStyle = color;
     ctx.fillRect(x, y, ancho, alto);
 }
 
-//  Función limpiarCanva
+// Función limpiarCanva
 function limpiarCanva() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-//  graficarGato modificada
+// graficarGato modificada
 function graficarGato() {
     graficarRectangulo(gatoX, gatoY, ANCHO_GATO, ALTO_GATO, "#be1c1c");
 }
 
-// GraficarComida modificada
+// graficarComida modificada
 function graficarComida() {
     graficarRectangulo(comidaX, comidaY, ANCHO_COMIDA, ALTO_COMIDA, "#061233");
+}
+
+// NUEVA FUNCIÓN: detectarColision (sin parámetros)
+function detectarColision() {
+    // Verificar si el gato toca la comida
+    // Colisión en eje X: gatoX < comidaX+anchoComida Y gatoX+anchoGato > comidaX
+    // Colisión en eje Y: gatoY < comidaY+altoComida Y gatoY+altoGato > comidaY
+    
+    if (gatoX < comidaX + ANCHO_COMIDA &&
+        gatoX + ANCHO_GATO > comidaX &&
+        gatoY < comidaY + ALTO_COMIDA &&
+        gatoY + ALTO_GATO > comidaY) {
+        
+        // Mostrar alert cuando hay colisión
+        alert("¡El gato atrapó la comida! 🎉");
+        
+        // Opcional: Actualizar puntuación
+        puntos += 10;
+        let puntosSpan = document.getElementById("puntos");
+        if (puntosSpan) {
+            puntosSpan.textContent = puntos;
+        }
+        
+        // Opcional: Mover la comida a una posición aleatoria
+        comidaX = Math.random() * (canvas.width - ANCHO_COMIDA);
+        comidaY = Math.random() * (canvas.height - ALTO_COMIDA);
+        
+        // Opcional: Mostrar mensaje en el panel
+        let mensaje = document.getElementById("mensaje");
+        if (mensaje) {
+            mensaje.textContent = "¡Atrapaste la comida! +10 puntos";
+            setTimeout(() => {
+                mensaje.textContent = "";
+            }, 1500);
+        }
+        
+        // Redibujar la comida en nueva posición
+        limpiarCanva();
+        graficarGato();
+        graficarComida();
+    }
 }
 
 // Función para dibujar todo (gato + comida)
@@ -49,10 +93,9 @@ function dibujarTodo() {
 }
 
 // ============================================
-// FUNCIONES DE MOVIMIENTO 
+// FUNCIONES DE MOVIMIENTO
 // ============================================
 
-// Punto : Función moverIzquierda
 function moverIzquierda() {
     // Restar 10 a la variable gatoX
     gatoX -= VELOCIDAD;
@@ -68,11 +111,13 @@ function moverIzquierda() {
     // Dibujar el gato en nueva posición
     graficarGato();
     
-    // Dibujar la comida (porque se borró al limpiar)
+    // Dibujar la comida
     graficarComida();
+    
+    // LLAMAR A detectarColision después de cada movimiento
+    detectarColision();
 }
 
-// Punto : Función moverDerecha
 function moverDerecha() {
     // Sumar 10 a la variable gatoX
     gatoX += VELOCIDAD;
@@ -90,9 +135,11 @@ function moverDerecha() {
     
     // Dibujar la comida
     graficarComida();
+    
+    // LLAMAR A detectarColision después de cada movimiento
+    detectarColision();
 }
 
-// Punto : Función moverArriba
 function moverArriba() {
     // Restar 10 a la variable gatoY
     gatoY -= VELOCIDAD;
@@ -110,9 +157,11 @@ function moverArriba() {
     
     // Dibujar la comida
     graficarComida();
+    
+    // LLAMAR A detectarColision después de cada movimiento
+    detectarColision();
 }
 
-// Punto: Función moverAbajo
 function moverAbajo() {
     // Sumar 10 a la variable gatoY
     gatoY += VELOCIDAD;
@@ -130,9 +179,12 @@ function moverAbajo() {
     
     // Dibujar la comida
     graficarComida();
+    
+    // LLAMAR A detectarColision después de cada movimiento
+    detectarColision();
 }
 
-// Punto  función iniciarJuego
+// función iniciarJuego
 function iniciarJuego() {
     // Punto 17: Asignar valores
     // Gato centrado
@@ -143,6 +195,19 @@ function iniciarJuego() {
     comidaX = canvas.width - ANCHO_COMIDA;
     comidaY = canvas.height - ALTO_COMIDA;
     
+    // Reiniciar puntuación
+    puntos = 0;
+    let puntosSpan = document.getElementById("puntos");
+    if (puntosSpan) {
+        puntosSpan.textContent = puntos;
+    }
+    
+    // Limpiar mensaje
+    let mensaje = document.getElementById("mensaje");
+    if (mensaje) {
+        mensaje.textContent = "";
+    }
+    
     // Limpiar canvas antes de dibujar
     limpiarCanva();
     
@@ -151,11 +216,14 @@ function iniciarJuego() {
     graficarComida();
 }
 
+// ============================================
+// CONFIGURACIÓN DE EVENTOS DE BOTONES
+// ============================================
 
-btnizquierda.onclick = () => moverIzquierda();  // Botón izquierda
-btnDerecha.onclick = () => moverDerecha();      // Botón derecha
-btnArriba.onclick = () => moverArriba();        // Botón arriba
-btnAbajo.onclick = () => moverAbajo();          // Botón abajo
+btnIzquierda.onclick = () => moverIzquierda();
+btnDerecha.onclick = () => moverDerecha();
+btnArriba.onclick = () => moverArriba();
+btnAbajo.onclick = () => moverAbajo();
 
 // Iniciar el juego cuando carga la página
 iniciarJuego();
