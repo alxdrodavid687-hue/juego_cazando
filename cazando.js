@@ -1,4 +1,4 @@
-/// Obtener canvas y contexto
+
 let canvas = document.getElementById("areaJuego");
 let ctx = canvas.getContext("2d");
 
@@ -10,7 +10,7 @@ let btnDerecha = document.getElementById("btnDerecha");
 
 const VELOCIDAD = 10;
 
-// Punto 16: Variables y constantes
+// Variables y constantes
 let gatoX = 0;
 let gatoY = 0;
 let comidaX = 0;
@@ -21,8 +21,8 @@ const ANCHO_GATO = 50;
 const ALTO_COMIDA = 30;
 const ANCHO_COMIDA = 30;
 
-// Variable para controlar puntuación
-let puntos = 0;
+// Variable para el puntaje
+let puntaje = 0;
 
 // Función graficarRectangulo
 function graficarRectangulo(x, y, ancho, alto, color) {
@@ -45,41 +45,50 @@ function graficarComida() {
     graficarRectangulo(comidaX, comidaY, ANCHO_COMIDA, ALTO_COMIDA, "#061233");
 }
 
+// NUEVA FUNCIÓN: generarPosicionAleatoriaComida()
+function generarPosicionAleatoriaComida() {
+    // Usar la función generarAleatorio de utilitarios.js
+    // Los límites: desde 0 hasta (canvas.width - ANCHO_COMIDA)
+    let maxX = canvas.width - ANCHO_COMIDA;
+    let maxY = canvas.height - ALTO_COMIDA;
+    
+    comidaX = generarAleatorio(0, maxX);
+    comidaY = generarAleatorio(0, maxY);
+}
+
+// NUEVA FUNCIÓN: actualizarPuntaje()
+function actualizarPuntaje() {
+    // Usar la función mostrarEnSpan de utilitarios.js
+    mostrarEnSpan("puntos", puntaje);
+}
+
 // NUEVA FUNCIÓN: detectarColision (sin parámetros)
 function detectarColision() {
     // Verificar si el gato toca la comida
-    // Colisión en eje X: gatoX < comidaX+anchoComida Y gatoX+anchoGato > comidaX
-    // Colisión en eje Y: gatoY < comidaY+altoComida Y gatoY+altoGato > comidaY
-    
     if (gatoX < comidaX + ANCHO_COMIDA &&
         gatoX + ANCHO_GATO > comidaX &&
         gatoY < comidaY + ALTO_COMIDA &&
         gatoY + ALTO_GATO > comidaY) {
         
-        // Mostrar alert cuando hay colisión
-        alert("¡El gato atrapó la comida! 🎉");
+        // La comida reaparece en posición aleatoria
+        generarPosicionAleatoriaComida();
         
-        // Opcional: Actualizar puntuación
-        puntos += 10;
-        let puntosSpan = document.getElementById("puntos");
-        if (puntosSpan) {
-            puntosSpan.textContent = puntos;
-        }
+        // Incrementar puntaje (1 punto por cada comida)
+        puntaje++;
         
-        // Opcional: Mover la comida a una posición aleatoria
-        comidaX = Math.random() * (canvas.width - ANCHO_COMIDA);
-        comidaY = Math.random() * (canvas.height - ALTO_COMIDA);
+        //  Mostrar el puntaje actualizado en pantalla
+        actualizarPuntaje();
         
-        // Opcional: Mostrar mensaje en el panel
+        // Mostrar mensaje opcional
         let mensaje = document.getElementById("mensaje");
         if (mensaje) {
-            mensaje.textContent = "¡Atrapaste la comida! +10 puntos";
+            mensaje.textContent = "¡Comiste! +1 punto 🎉";
             setTimeout(() => {
                 mensaje.textContent = "";
-            }, 1500);
+            }, 1000);
         }
         
-        // Redibujar la comida en nueva posición
+        // Redibujar todo con la nueva posición de la comida
         limpiarCanva();
         graficarGato();
         graficarComida();
@@ -97,110 +106,61 @@ function dibujarTodo() {
 // ============================================
 
 function moverIzquierda() {
-    // Restar 10 a la variable gatoX
     gatoX -= VELOCIDAD;
-    
-    // Validar límites (borde izquierdo)
     if (gatoX < 0) {
         gatoX = 0;
     }
-    
-    // Limpiar el canvas
     limpiarCanva();
-    
-    // Dibujar el gato en nueva posición
     graficarGato();
-    
-    // Dibujar la comida
     graficarComida();
-    
-    // LLAMAR A detectarColision después de cada movimiento
     detectarColision();
 }
 
 function moverDerecha() {
-    // Sumar 10 a la variable gatoX
     gatoX += VELOCIDAD;
-    
-    // Validar límites (borde derecho)
     if (gatoX > canvas.width - ANCHO_GATO) {
         gatoX = canvas.width - ANCHO_GATO;
     }
-    
-    // Limpiar el canvas
     limpiarCanva();
-    
-    // Dibujar el gato en nueva posición
     graficarGato();
-    
-    // Dibujar la comida
     graficarComida();
-    
-    // LLAMAR A detectarColision después de cada movimiento
     detectarColision();
 }
 
 function moverArriba() {
-    // Restar 10 a la variable gatoY
     gatoY -= VELOCIDAD;
-    
-    // Validar límites (borde superior)
     if (gatoY < 0) {
         gatoY = 0;
     }
-    
-    // Limpiar el canvas
     limpiarCanva();
-    
-    // Dibujar el gato en nueva posición
     graficarGato();
-    
-    // Dibujar la comida
     graficarComida();
-    
-    // LLAMAR A detectarColision después de cada movimiento
     detectarColision();
 }
 
 function moverAbajo() {
-    // Sumar 10 a la variable gatoY
     gatoY += VELOCIDAD;
-    
-    // Validar límites (borde inferior)
     if (gatoY > canvas.height - ALTO_GATO) {
         gatoY = canvas.height - ALTO_GATO;
     }
-    
-    // Limpiar el canvas
     limpiarCanva();
-    
-    // Dibujar el gato en nueva posición
     graficarGato();
-    
-    // Dibujar la comida
     graficarComida();
-    
-    // LLAMAR A detectarColision después de cada movimiento
     detectarColision();
 }
 
-// función iniciarJuego
+//  función iniciarJuego
 function iniciarJuego() {
-    // Punto 17: Asignar valores
     // Gato centrado
     gatoX = (canvas.width / 2) - (ANCHO_GATO / 2);
     gatoY = (canvas.height / 2) - (ALTO_GATO / 2);
     
-    // Comida en esquina inferior derecha
-    comidaX = canvas.width - ANCHO_COMIDA;
-    comidaY = canvas.height - ALTO_COMIDA;
+    // Comida en posición aleatoria usando utilitarios.js
+    generarPosicionAleatoriaComida();
     
-    // Reiniciar puntuación
-    puntos = 0;
-    let puntosSpan = document.getElementById("puntos");
-    if (puntosSpan) {
-        puntosSpan.textContent = puntos;
-    }
+    // Reiniciar puntaje
+    puntaje = 0;
+    actualizarPuntaje();
     
     // Limpiar mensaje
     let mensaje = document.getElementById("mensaje");
