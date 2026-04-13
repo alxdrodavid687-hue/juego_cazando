@@ -1,4 +1,4 @@
-// Obtener canvas y contexto
+//  Obtener canvas y contexto
 let canvas = document.getElementById("areaJuego");
 let ctx = canvas.getContext("2d");
 
@@ -8,9 +8,9 @@ let btnizquierda = document.getElementById("btnizquierda");
 let btnabajo = document.getElementById("btnabajo");
 let btnderecha = document.getElementById("btnderecha");
 
-const VELOCIDAD = 10; // Cambiado a 10 
+const VELOCIDAD = 10;
 
-// Variables y constantes
+//  Variables y constantes
 let gatoX = 0;
 let gatoY = 0;
 let comidaX = 0;
@@ -21,23 +21,23 @@ const ANCHO_GATO = 50;
 const ALTO_COMIDA = 30;
 const ANCHO_COMIDA = 30;
 
-// Función graficarRectangulo
+//  Función graficarRectangulo
 function graficarRectangulo(x, y, ancho, alto, color) {
     ctx.fillStyle = color;
     ctx.fillRect(x, y, ancho, alto);
 }
 
-// Función limpiarCanva
+//  Función limpiarCanva
 function limpiarCanva() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-// graficarGato modificada
+//  graficarGato modificada
 function graficarGato() {
     graficarRectangulo(gatoX, gatoY, ANCHO_GATO, ALTO_GATO, "#be1c1c");
 }
 
-// graficarComida modificada
+// GraficarComida modificada
 function graficarComida() {
     graficarRectangulo(comidaX, comidaY, ANCHO_COMIDA, ALTO_COMIDA, "#061233");
 }
@@ -48,12 +48,16 @@ function dibujarTodo() {
     graficarComida();
 }
 
-// Función moverIzquierda
+// ============================================
+// FUNCIONES DE MOVIMIENTO 
+// ============================================
+
+// Punto : Función moverIzquierda
 function moverIzquierda() {
     // Restar 10 a la variable gatoX
-    gatoX -= 10;
+    gatoX -= VELOCIDAD;
     
-    // Validar límites (para que no salga del canvas)
+    // Validar límites (borde izquierdo)
     if (gatoX < 0) {
         gatoX = 0;
     }
@@ -68,47 +72,67 @@ function moverIzquierda() {
     graficarComida();
 }
 
-// Función moverDerecha (complementaria para completar funcionalidad)
+// Punto : Función moverDerecha
 function moverDerecha() {
-    gatoX += 10;
+    // Sumar 10 a la variable gatoX
+    gatoX += VELOCIDAD;
     
-    // Validar límites
+    // Validar límites (borde derecho)
     if (gatoX > canvas.width - ANCHO_GATO) {
         gatoX = canvas.width - ANCHO_GATO;
     }
     
+    // Limpiar el canvas
     limpiarCanva();
+    
+    // Dibujar el gato en nueva posición
     graficarGato();
+    
+    // Dibujar la comida
     graficarComida();
 }
 
-// Función moverArriba (complementaria)
+// Punto : Función moverArriba
 function moverArriba() {
-    gatoY -= 10;
+    // Restar 10 a la variable gatoY
+    gatoY -= VELOCIDAD;
     
+    // Validar límites (borde superior)
     if (gatoY < 0) {
         gatoY = 0;
     }
     
+    // Limpiar el canvas
     limpiarCanva();
+    
+    // Dibujar el gato en nueva posición
     graficarGato();
+    
+    // Dibujar la comida
     graficarComida();
 }
 
-// Función moverAbajo (complementaria)
+// Punto: Función moverAbajo
 function moverAbajo() {
-    gatoY += 10;
+    // Sumar 10 a la variable gatoY
+    gatoY += VELOCIDAD;
     
+    // Validar límites (borde inferior)
     if (gatoY > canvas.height - ALTO_GATO) {
         gatoY = canvas.height - ALTO_GATO;
     }
     
+    // Limpiar el canvas
     limpiarCanva();
+    
+    // Dibujar el gato en nueva posición
     graficarGato();
+    
+    // Dibujar la comida
     graficarComida();
 }
 
-// función iniciarJuego
+// Punto  función iniciarJuego
 function iniciarJuego() {
     // Punto 17: Asignar valores
     // Gato centrado
@@ -127,12 +151,11 @@ function iniciarJuego() {
     graficarComida();
 }
 
-// Configuración de eventos de los botones
-// Invocar moverIzquierda desde el botón correspondiente
-btnarriba.onclick = () => moverArriba();
-btnabajo.onclick = () => moverAbajo();
-btnizquierda.onclick = () => moverIzquierda();  // ← Función solicitada
-btnderecha.onclick = () => moverDerecha();
+
+btnizquierda.onclick = () => moverIzquierda();  // Botón izquierda
+btnDerecha.onclick = () => moverDerecha();      // Botón derecha
+btnArriba.onclick = () => moverArriba();        // Botón arriba
+btnAbajo.onclick = () => moverAbajo();          // Botón abajo
 
 // Iniciar el juego cuando carga la página
 iniciarJuego();
