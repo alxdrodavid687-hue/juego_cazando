@@ -1,84 +1,602 @@
-body {
-  text-align: center;
-  font-family: Arial, sans-serif;
-  background: #bd2d2d;
+/* ============================================
+   GOD OF WAR THEME - CAZANDO COMIDA
+   Estilo nórdico / espartano
+   ============================================ */
+
+/* Variables del tema God of War */
+:root {
+  --gow-gold: #c9a03d;
+  --gow-gold-dark: #8b6914;
+  --gow-gold-glow: rgba(201, 160, 61, 0.4);
+  --gow-red: #8b0000;
+  --gow-red-dark: #5c0000;
+  --gow-dark: #1a1a2e;
+  --gow-darker: #0f0f1a;
+  --gow-snow: #d4d4dc;
+  --gow-ice: #4a6fa5;
+  --gow-rune: #b8860b;
+  --gow-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  --gow-glow: 0 0 15px var(--gow-gold-glow);
+  --gradient-gow: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f1a 100%);
+  --gradient-gold: linear-gradient(135deg, #c9a03d 0%, #8b6914 100%);
+  --gradient-blood: linear-gradient(135deg, #8b0000 0%, #5c0000 100%);
+}
+
+* {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--gow-darker);
+  font-family: 'Rajdhani', 'MedievalSharp', monospace;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Overlay de nieve (efecto Fimbulwinter) */
+.snow-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.03) 0%, transparent 70%);
+  z-index: 0;
+}
+
+.game-container {
+  position: relative;
+  z-index: 1;
+  max-width: 1400px;
+  margin: 0 auto;
   padding: 20px;
 }
 
-h1 {
-  margin-bottom: 5px;
-  color: white;
+/* ============================================
+   HEADER GOD OF WAR
+   ============================================ */
+.gow-header {
+  text-align: center;
+  margin-bottom: 30px;
+  position: relative;
 }
 
-.panel {
-  margin: 15px 0;
-  font-size: 18px;
+.header-content {
   display: flex;
   justify-content: center;
-  gap: 30px;
-  background: white;
-  padding: 10px;
-  border-radius: 10px;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.spartan-helmet, .leviathan-axe {
+  font-size: 48px;
+  filter: drop-shadow(0 0 10px var(--gow-gold));
+  animation: float 3s ease-in-out infinite;
+}
+
+.leviathan-axe {
+  animation-delay: 1.5s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.gow-title {
+  text-align: center;
+  margin: 0;
+}
+
+.title-line {
+  font-family: 'Cinema Decorative', 'MedievalSharp', cursive;
+  font-size: 2.5rem;
+  background: var(--gradient-gold);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 30px rgba(201, 160, 61, 0.5);
+  letter-spacing: 5px;
+  display: block;
+}
+
+.subtitle {
+  font-family: 'MedievalSharp', monospace;
+  font-size: 1rem;
+  color: var(--gow-snow);
+  letter-spacing: 3px;
+  display: block;
+  margin-top: 8px;
+}
+
+.autor {
+  color: var(--gow-gold);
+  font-family: 'MedievalSharp', monospace;
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  margin-top: 12px;
+  text-shadow: 0 0 5px rgba(201, 160, 61, 0.5);
+}
+
+.legacy-mark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(201,160,61,0.05) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ============================================
+   LAYOUT PRINCIPAL: CANVAS IZQUIERDA + CONTROLES DERECHA
+   ============================================ */
+.game-layout {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.canvas-area {
+  flex-shrink: 0;
+}
+
+/* Canvas con bordes rúnicos */
+.canvas-border-rune {
+  position: relative;
+  padding: 15px;
+  background: var(--gradient-gow);
+  border-radius: 8px;
+  box-shadow: var(--gow-shadow), inset 0 0 30px rgba(0,0,0,0.5);
+}
+
+.rune-corner {
+  position: absolute;
+  font-family: monospace;
+  font-size: 24px;
+  color: var(--gow-gold);
+  text-shadow: 0 0 10px var(--gow-gold);
+  z-index: 2;
+}
+
+.top-left {
+  top: -5px;
+  left: -5px;
+}
+
+.top-right {
+  top: -5px;
+  right: -5px;
+}
+
+.bottom-left {
+  bottom: -5px;
+  left: -5px;
+}
+
+.bottom-right {
+  bottom: -5px;
+  right: -5px;
 }
 
 canvas {
-  background: rgb(247, 244, 244);
-  border: 2px solid black;
-  box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
-}
-
-.controles {
-  margin-top: 20px;
-}
-
-button {
-  margin: 5px;
-  padding: 10px 20px;
-  font-size: 18px;
+  background: radial-gradient(circle at 30% 40%, #2a2a3e 0%, #0f0f1a 100%);
+  border-radius: 4px;
+  box-shadow: inset 0 0 50px rgba(0,0,0,0.5), 0 0 0 2px var(--gow-gold-dark);
+  display: block;
   cursor: pointer;
-  background: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  transition: transform 0.2s;
 }
 
-button:hover {
+/* ============================================
+   PANEL DE CONTROL (DERECHA)
+   ============================================ */
+.control-panel {
+  flex: 1;
+  min-width: 300px;
+  max-width: 380px;
+}
+
+/* Tarjetas de estadísticas */
+.stats-panel {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.stat-card {
+  flex: 1;
+  background: linear-gradient(135deg, rgba(26,26,46,0.9) 0%, rgba(15,15,26,0.95) 100%);
+  border: 1px solid var(--gow-gold-dark);
+  border-radius: 12px;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--gradient-gold);
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--gow-glow);
+  border-color: var(--gow-gold);
+}
+
+.stat-icon {
+  font-size: 32px;
+  filter: drop-shadow(0 0 5px var(--gow-gold));
+}
+
+.stat-info {
+  flex: 1;
+}
+
+.stat-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: var(--gow-gold);
+  text-transform: uppercase;
+}
+
+.stat-value {
+  font-family: 'Cinema Decorative', monospace;
+  font-size: 36px;
+  font-weight: bold;
+  color: var(--gow-snow);
+  text-shadow: 0 0 10px rgba(201,160,61,0.5);
+  line-height: 1;
+}
+
+.time-value {
+  color: var(--gow-gold);
+}
+
+.stat-sub {
+  font-size: 9px;
+  color: rgba(212,212,220,0.5);
+  letter-spacing: 1px;
+}
+
+/* Divisor rúnico */
+.divider-rune {
+  text-align: center;
+  font-family: monospace;
+  font-size: 10px;
+  color: var(--gow-gold-dark);
+  letter-spacing: 3px;
+  margin: 15px 0;
+  opacity: 0.6;
+}
+
+/* ============================================
+   CONTROLES DE COMBATE (D-PAD)
+   ============================================ */
+.combat-controls {
+  background: linear-gradient(135deg, rgba(26,26,46,0.8) 0%, rgba(15,15,26,0.9) 100%);
+  border: 1px solid var(--gow-gold-dark);
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.control-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.title-rune {
+  font-family: monospace;
+  font-size: 12px;
+  color: var(--gow-gold);
+  letter-spacing: 4px;
+  display: block;
+}
+
+.title-text {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: var(--gow-snow);
+  display: block;
+  margin-top: 4px;
+}
+
+.d-pad-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.d-pad-row {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.combat-btn {
+  width: 80px;
+  height: 80px;
+  background: var(--gradient-gow);
+  border: 2px solid var(--gow-gold-dark);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.combat-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(201,160,61,0.2);
+  border-radius: 50%;
+  transition: width 0.3s, height 0.3s;
+  transform: translate(-50%, -50%);
+}
+
+.combat-btn:hover::before {
+  width: 100%;
+  height: 100%;
+}
+
+.combat-btn:hover {
+  border-color: var(--gow-gold);
+  box-shadow: var(--gow-glow);
   transform: scale(1.05);
-  background: #45a049;
 }
 
-button:active {
+.combat-btn:active {
   transform: scale(0.95);
 }
 
-/* Estilo para botón reiniciar */
-#btnReiniciar {
-  background: #ff9800;
-  margin-top: 15px;
-  padding: 12px 25px;
-  font-size: 16px;
+.combat-btn:disabled {
+  opacity: 0.4;
+  transform: none;
+  cursor: not-allowed;
 }
 
-#btnReiniciar:hover {
-  background: #fb8c00;
+.btn-icon {
+  font-size: 28px;
+  color: var(--gow-gold);
 }
 
-.reiniciar {
+.btn-rune {
+  font-family: monospace;
+  font-size: 12px;
+  color: var(--gow-snow);
+  opacity: 0.7;
+}
+
+/* Centro del D-Pad */
+.combat-center {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #2a2a3e, #1a1a2e);
+  border: 2px solid var(--gow-gold-dark);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.center-symbol {
+  font-size: 36px;
+  filter: drop-shadow(0 0 8px var(--gow-gold));
+  animation: pulse-gow 1.5s ease-in-out infinite;
+}
+
+.center-glow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  background: radial-gradient(circle, rgba(201,160,61,0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+@keyframes pulse-gow {
+  0%, 100% { transform: scale(1); text-shadow: 0 0 5px var(--gow-gold); }
+  50% { transform: scale(1.1); text-shadow: 0 0 20px var(--gow-gold); }
+}
+
+/* Botón reiniciar estilo God of War */
+.restart-btn {
+  width: 100%;
+  background: var(--gradient-blood);
+  border: 2px solid var(--gow-gold-dark);
+  border-radius: 50px;
+  padding: 14px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.restart-btn:hover {
+  border-color: var(--gow-gold);
+  box-shadow: var(--gow-glow);
+  transform: scale(1.02);
+}
+
+.restart-btn:active {
+  transform: scale(0.98);
+}
+
+.restart-icon {
+  font-size: 20px;
+  transition: transform 0.3s;
+}
+
+.restart-btn:hover .restart-icon {
+  transform: rotate(180deg);
+}
+
+.restart-text {
+  font-family: 'MedievalSharp', monospace;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  color: var(--gow-snow);
+}
+
+.restart-rune {
+  font-family: monospace;
+  font-size: 10px;
+  color: var(--gow-gold);
+}
+
+/* Mensaje de estado */
+.status-container {
   margin-top: 10px;
 }
 
-#mensaje {
-  font-size: 20px;
-  font-weight: bold;
-  color: rgb(173, 113, 113);
-  margin-top: 15px;
+.status-border {
+  background: linear-gradient(135deg, rgba(26,26,46,0.9) 0%, rgba(15,15,26,0.95) 100%);
+  border: 1px solid var(--gow-gold-dark);
+  border-radius: 12px;
+  padding: 12px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
 }
 
-/* Deshabilitar botones cuando el juego termina */
-button:disabled {
-  background: #cccccc;
-  cursor: not-allowed;
-  transform: none;
+.status-rune-left, .status-rune-right {
+  font-family: monospace;
+  font-size: 16px;
+  color: var(--gow-gold);
+  opacity: 0.7;
+}
+
+.status-message {
+  font-family: 'MedievalSharp', monospace;
+  font-size: 13px;
+  font-weight: bold;
+  color: var(--gow-snow);
+  letter-spacing: 1px;
+  margin: 0;
+  text-align: center;
+  flex: 1;
+}
+
+/* ============================================
+   FOOTER GOD OF WAR
+   ============================================ */
+.gow-footer {
+  margin-top: 40px;
+  padding: 20px;
+  text-align: center;
+  border-top: 1px solid rgba(201,160,61,0.3);
+}
+
+.footer-runes {
+  font-family: monospace;
+  font-size: 12px;
+  color: var(--gow-gold-dark);
+  letter-spacing: 3px;
+  margin-bottom: 10px;
+}
+
+.gow-footer p {
+  font-size: 10px;
+  color: rgba(212,212,220,0.4);
+  letter-spacing: 1px;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 900px) {
+  .game-layout {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .control-panel {
+    width: 100%;
+    max-width: 500px;
+  }
+  
+  .title-line {
+    font-size: 1.8rem;
+  }
+  
+  .combat-btn {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .combat-center {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .btn-icon {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 500px) {
+  .combat-btn {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .combat-center {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .center-symbol {
+    font-size: 28px;
+  }
+  
+  .stats-panel {
+    flex-direction: column;
+  }
+}
+
+/* Animaciones adicionales */
+@keyframes runeGlow {
+  0%, 100% { text-shadow: 0 0 5px var(--gow-gold); }
+  50% { text-shadow: 0 0 15px var(--gow-gold); }
+}
+
+.rune-corner {
+  animation: runeGlow 2s ease-in-out infinite;
 }

@@ -1,0 +1,7 @@
+PRIMER PROMPT
+ahora mejora la interfaz gráfica del juego Cazandom considerando un diseño futurista, gamer. 
+Importante: Solo está permitido modificar los archivos HTML y CSS. 
+No se debe realizar ningún cambio en el archivo JavaScript.
+SEGUNDO PROMPT
+genial ahora quisiera que los botones esten en el lado derecho del canvas con un tiempo de 20. 
+Además que sea un diseño inspirado en god of war  

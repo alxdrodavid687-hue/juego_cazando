@@ -1,38 +1,146 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 
 <head>
-  <title>Juego Cazando</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⚔️ GOD OF WAR - CAZANDO COMIDA ⚔️</title>
   <link rel="stylesheet" href="cazando.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinema+Decorative:wght@400;700;900&family=MedievalSharp&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body onload="iniciarJuego()">
 
-  <h1>JUEGO CAZANDO</h1>
-  <p>Autor: DAVID ATTI</p>
-
-  <canvas id="areaJuego" width="500" height="500"></canvas>
-
-  <div class="controles">
-    <button id="btnArriba">⬆ Arriba</button>
-    <br>
-    <button id="btnIzquierda">⬅ Izquierda</button>
-    <button id="btnAbajo">⬇ Abajo</button>
-    <button id="btnDerecha">➡ Derecha</button>
-  </div>
-
-  <div class="panel">
-    <span>Puntos: <span id="puntos">0</span></span>
-    <span>Tiempo: <span id="tiempo">10</span></span>
-  </div>
+  <!-- Capa de nieve/video (efecto God of War) -->
+  <div class="snow-overlay"></div>
   
-  <!-- NUEVO BOTÓN REINICIAR -->
-  <div class="reiniciar">
-    <button id="btnReiniciar">🔄 Reiniciar Juego</button>
+  <div class="game-container">
+    
+    <!-- Encabezado estilo God of War -->
+    <div class="gow-header">
+      <div class="legacy-mark"></div>
+      <div class="header-content">
+        <div class="spartan-helmet">🪓</div>
+        <h1 class="gow-title">
+          <span class="title-line">⚔️ GOD OF WAR ⚔️</span>
+          <span class="subtitle">CAZANDO COMIDA</span>
+        </h1>
+        <div class="leviathan-axe">🪓</div>
+      </div>
+      <p class="autor">✦ FORJADO POR DAVID ATTI ✦</p>
+    </div>
+
+    <!-- Layout principal: Canvas izquierda + Controles derecha -->
+    <div class="game-layout">
+      
+      <!-- Canvas (Izquierda) -->
+      <div class="canvas-area">
+        <div class="canvas-border-rune">
+          <div class="rune-corner top-left">ᚱ</div>
+          <div class="rune-corner top-right">ᚨ</div>
+          <div class="rune-corner bottom-left">ᚦ</div>
+          <div class="rune-corner bottom-right">ᚲ</div>
+          <canvas id="areaJuego" width="500" height="500"></canvas>
+        </div>
+      </div>
+
+      <!-- Panel de control (Derecha) -->
+      <div class="control-panel">
+        
+        <!-- Panel de estadísticas estilo God of War -->
+        <div class="stats-panel">
+          <div class="stat-card rage-card">
+            <div class="stat-icon">⚡</div>
+            <div class="stat-info">
+              <div class="stat-label">ESPÍRITU DE KRATOS</div>
+              <div class="stat-value" id="puntos">0</div>
+              <div class="stat-sub">PUNTOS</div>
+            </div>
+          </div>
+          
+          <div class="stat-card time-card">
+            <div class="stat-icon">⌛</div>
+            <div class="stat-info">
+              <div class="stat-label">FURIA NÓRDICA</div>
+              <div class="stat-value time-value" id="tiempo">20</div>
+              <div class="stat-sub">SEGUNDOS</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Separador decorativo -->
+        <div class="divider-rune">
+          <span>ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ᚷ ᚹ ᚺ ᚾ ᛁ ᛃ ᛇ ᛈ ᛉ ᛊ ᛏ ᛒ ᛖ ᛗ ᛚ ᛝ ᛟ ᛞ</span>
+        </div>
+
+        <!-- Botones de control estilo God of War (D-Pad) -->
+        <div class="combat-controls">
+          <div class="control-title">
+            <span class="title-rune">ᚲᛟᚾᛏᚱᛟᛚ</span>
+            <span class="title-text">CONTROL DE COMBATE</span>
+          </div>
+          
+          <div class="d-pad-container">
+            <!-- Flecha Arriba -->
+            <div class="d-pad-row top-row">
+              <button id="btnArriba" class="combat-btn arrow-up">
+                <span class="btn-icon">▲</span>
+                <span class="btn-rune">ᚨ</span>
+              </button>
+            </div>
+            
+            <!-- Fila central: Izquierda + Centro + Derecha -->
+            <div class="d-pad-row center-row">
+              <button id="btnIzquierda" class="combat-btn arrow-left">
+                <span class="btn-icon">◀</span>
+                <span class="btn-rune">ᚱ</span>
+              </button>
+              <div class="combat-center">
+                <div class="center-symbol">🪓</div>
+                <div class="center-glow"></div>
+              </div>
+              <button id="btnDerecha" class="combat-btn arrow-right">
+                <span class="btn-icon">▶</span>
+                <span class="btn-rune">ᚲ</span>
+              </button>
+            </div>
+            
+            <!-- Flecha Abajo -->
+            <div class="d-pad-row bottom-row">
+              <button id="btnAbajo" class="combat-btn arrow-down">
+                <span class="btn-icon">▼</span>
+                <span class="btn-rune">ᚦ</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botón Reiniciar estilo God of War -->
+        <button id="btnReiniciar" class="restart-btn">
+          <span class="restart-icon">🔄</span>
+          <span class="restart-text">REINICIAR EL RITUAL</span>
+          <span class="restart-rune">ᚱᛖᛋᛖᛏ</span>
+        </button>
+
+        <!-- Mensaje de estado -->
+        <div class="status-container">
+          <div class="status-border">
+            <div class="status-rune-left">ᛊ</div>
+            <p id="mensaje" class="status-message">⚔️ QUE COMIENCE LA CAZA ⚔️</p>
+            <div class="status-rune-right">ᛏ</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer God of War -->
+    <footer class="gow-footer">
+      <div class="footer-runes">ᚱᚨᚷᚾᚨᚱᛟᚲ ᛖᛋ ᛏᚢ ᛞᛖᛋᛏᛁᚾᛟ</div>
+      <p>⚔️ ATRA LA COMIDA ANTES DE QUE EL TIEMPO TERMINE | 6 PUNTOS PARA LA GLORIA ⚔️</p>
+    </footer>
+
   </div>
 
-  <p id="mensaje"></p>
-  
   <script src="utils.js"></script>
   <script src="cazando.js"></script>
 </body>
