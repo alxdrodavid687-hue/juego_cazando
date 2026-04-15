@@ -12,7 +12,7 @@ let btnAbajo = document.getElementById("btnAbajo");
 let btnDerecha = document.getElementById("btnDerecha");
 let btnReiniciar = document.getElementById("btnReiniciar");
 
-const VELOCIDAD = 10;
+const VELOCIDAD = 30;
 
 // Constantes
 const ALTO_GATO = 50;
@@ -26,7 +26,7 @@ let gatoY = 0;
 let comidaX = 0;
 let comidaY = 0;
 let puntaje = 0;
-let tiempo = 10;
+let tiempo = 40;
 let intervalo = null;
 let juegoActivo = true;
 
@@ -48,7 +48,7 @@ function graficarGato() {
 
 // graficarComida
 function graficarComida() {
-    graficarRectangulo(comidaX, comidaY, ANCHO_COMIDA, ALTO_COMIDA, "#061233");
+    graficarRectangulo(comidaX, comidaY, ANCHO_COMIDA, ALTO_COMIDA, "#aeb7ce");
 }
 
 // Generar posición aleatoria de la comida
@@ -247,7 +247,7 @@ function reiniciarJuego() {
     
     // Reiniciar variables
     puntaje = 0;
-    tiempo = 10;
+    tiempo = 40;
     juegoActivo = true;
     
     // Posicionar gato en centro
@@ -305,7 +305,7 @@ function iniciarJuego() {
     
     // Reiniciar variables
     puntaje = 0;
-    tiempo = 10;
+    tiempo = 40;
     juegoActivo = true;
     
     // Actualizar pantalla

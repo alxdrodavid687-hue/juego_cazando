@@ -1,0 +1,3 @@
+gran trabajo ahora incluye la siguiente imagen como background god of war.versiones.jpg
+deseo cambiar el tiempo del juego de 10 segundos a 40 segundos
+aumentar la velocidad del gato de 10 a 30
