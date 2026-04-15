@@ -1,3 +1,6 @@
+// cazando.js
+// Juego principal con sistema de tiempo y reinicio
+
 // Obtener canvas y contexto
 let canvas = document.getElementById("areaJuego");
 let ctx = canvas.getContext("2d");
@@ -11,22 +14,21 @@ let btnReiniciar = document.getElementById("btnReiniciar");
 
 const VELOCIDAD = 10;
 
-// Variables y constantes
-let gatoX = 0;
-let gatoY = 0;
-let comidaX = 0;
-let comidaY = 0;
-
+// Constantes
 const ALTO_GATO = 50;
 const ANCHO_GATO = 50;
 const ALTO_COMIDA = 30;
 const ANCHO_COMIDA = 30;
 
 // Variables del juego
+let gatoX = 0;
+let gatoY = 0;
+let comidaX = 0;
+let comidaY = 0;
 let puntaje = 0;
-let tiempo = 10;  // Punto 1: Variable tiempo con valor inicial 10
-let intervalo = null;  // Variable para almacenar el setInterval
-let juegoActivo = true;  // Controla si el juego está activo
+let tiempo = 10;
+let intervalo = null;
+let juegoActivo = true;
 
 // Función graficarRectangulo
 function graficarRectangulo(x, y, ancho, alto, color) {
@@ -39,71 +41,58 @@ function limpiarCanva() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-// graficarGato modificada
+// graficarGato
 function graficarGato() {
     graficarRectangulo(gatoX, gatoY, ANCHO_GATO, ALTO_GATO, "#be1c1c");
 }
 
-// graficarComida modificada
+// graficarComida
 function graficarComida() {
     graficarRectangulo(comidaX, comidaY, ANCHO_COMIDA, ALTO_COMIDA, "#061233");
 }
 
-// Función para generar posición aleatoria de la comida
+// Generar posición aleatoria de la comida
 function generarPosicionAleatoriaComida() {
     let maxX = canvas.width - ANCHO_COMIDA;
     let maxY = canvas.height - ALTO_COMIDA;
     
     comidaX = generarAleatorio(0, maxX);
     comidaY = generarAleatorio(0, maxY);
+    
+    console.log("Comida nueva posición: X=" + comidaX + ", Y=" + comidaY);
 }
 
-// Función para actualizar el puntaje en pantalla
+// Actualizar puntaje
 function actualizarPuntaje() {
     mostrarEnSpan("puntos", puntaje);
+    console.log("Puntaje: " + puntaje);
 }
 
-// Función para actualizar el tiempo en pantalla
+// Actualizar tiempo
 function actualizarTiempo() {
     mostrarEnSpan("tiempo", tiempo);
 }
 
-// Función restarTiempo
-function restarTiempo() {
-    // Solo restar tiempo si el juego está activo
-    if (!juegoActivo) return;
-    
-    // Restar 1 a la variable tiempo
-    tiempo--;
-    
-    // Actualizar el valor en pantalla usando utilitarios.js
-    actualizarTiempo();
-    
-    // Verificar si tiempo llega a 0
-    if (tiempo <= 0) {
-        tiempo = 0;
-        actualizarTiempo();
-        gameOver("⏰ ¡TIEMPO AGOTADO! Game Over ⏰");
-    }
-}
+// ============================================
+// FUNCIONES DE FIN DEL JUEGO (CORREGIDAS)
+// ============================================
 
-// Función para detener el juego (ganador o game over)
 function detenerJuego(mensaje) {
     juegoActivo = false;
     
-    // Detener el setInterval
+    // Detener intervalo
     if (intervalo) {
         clearInterval(intervalo);
         intervalo = null;
     }
     
-    // Deshabilitar botones de movimiento
+    // Deshabilitar SOLO botones de movimiento (NO el de reiniciar)
     btnArriba.disabled = true;
     btnIzquierda.disabled = true;
     btnAbajo.disabled = true;
     btnDerecha.disabled = true;
     
-    // Mostrar mensaje en el panel
+    // Mostrar mensaje
     let mensajeSpan = document.getElementById("mensaje");
     if (mensajeSpan) {
         mensajeSpan.textContent = mensaje;
@@ -112,112 +101,76 @@ function detenerJuego(mensaje) {
     }
 }
 
-// Función para Game Over
-function gameOver(mensaje) {
+function gameOver() {
     if (!juegoActivo) return;
-    alert(mensaje);
-    detenerJuego(mensaje);
+    alert("⏰ ¡TIEMPO AGOTADO! Game Over ⏰");
+    detenerJuego("⏰ ¡GAME OVER! Presiona REINICIAR ⏰");
 }
 
-// Función para Victoria
 function victoria() {
     if (!juegoActivo) return;
     alert("🎉 ¡FELICIDADES! ¡GANASTE EL JUEGO! 🎉");
-    detenerJuego("🎉 ¡VICTORIA! Llegaste a 6 puntos 🎉");
+    detenerJuego("🎉 ¡VICTORIA! Presiona REINICIAR 🎉");
 }
 
-// Función para habilitar botones de movimiento
-function habilitarBotonesMovimiento(habilitar) {
-    btnArriba.disabled = !habilitar;
-    btnIzquierda.disabled = !habilitar;
-    btnAbajo.disabled = !habilitar;
-    btnDerecha.disabled = !habilitar;
-}
+// ============================================
+// FUNCIÓN RESTAR TIEMPO (CORREGIDA)
+// ============================================
 
-// Función para reiniciar el juego
-function reiniciarJuego() {
-    // Detener el intervalo actual si existe
-    if (intervalo) {
-        clearInterval(intervalo);
-        intervalo = null;
+function restarTiempo() {
+    if (!juegoActivo) return;
+    
+    if (tiempo > 0) {
+        tiempo--;
+        actualizarTiempo();
+        
+        if (tiempo <= 0) {
+            gameOver();
+        }
     }
-    
-    // Reiniciar variables
-    puntaje = 0;
-    tiempo = 10;
-    juegoActivo = true;
-    
-    // Actualizar pantalla
-    actualizarPuntaje();
-    actualizarTiempo();
-    
-    // Limpiar mensaje
-    let mensajeSpan = document.getElementById("mensaje");
-    if (mensajeSpan) {
-        mensajeSpan.textContent = "";
-        mensajeSpan.style.color = "";
-        mensajeSpan.style.fontSize = "";
-    }
-    
-    // Habilitar botones de movimiento
-    habilitarBotonesMovimiento(true);
-    
-    // Posicionar gato centrado
-    gatoX = (canvas.width / 2) - (ANCHO_GATO / 2);
-    gatoY = (canvas.height / 2) - (ALTO_GATO / 2);
-    
-    // Posicionar comida aleatoriamente
-    generarPosicionAleatoriaComida();
-    
-    // Limpiar y dibujar
-    limpiarCanva();
-    graficarGato();
-    graficarComida();
-    
-    // Iniciar nuevo intervalo
-    intervalo = setInterval(restarTiempo, 1000);
 }
 
-// Función para detectar colisión
+// ============================================
+// FUNCIÓN DETECTAR COLISIÓN
+// ============================================
+
 function detectarColision() {
-    // Solo detectar colisión si el juego está activo
     if (!juegoActivo) return false;
     
-    // Verificar si el gato toca la comida
+    // Verificar colisión
     if (gatoX < comidaX + ANCHO_COMIDA &&
         gatoX + ANCHO_GATO > comidaX &&
         gatoY < comidaY + ALTO_COMIDA &&
         gatoY + ALTO_GATO > comidaY) {
         
-        // La comida reaparece en posición aleatoria
-        generarPosicionAleatoriaComida();
+        console.log("¡COLISIÓN DETECTADA!");
         
-        // Incrementar puntaje (1 punto por cada comida)
+        // 1. Incrementar puntaje
         puntaje++;
-        
-        // Mostrar el puntaje actualizado en pantalla
         actualizarPuntaje();
         
-        // Mostrar mensaje temporal
+        // 2. Generar NUEVA posición para la comida
+        generarPosicionAleatoriaComida();
+        
+        // 3. Mostrar mensaje temporal
         let mensaje = document.getElementById("mensaje");
         if (mensaje) {
             mensaje.textContent = "¡Comiste! +1 punto 🎉";
             mensaje.style.color = "#4CAF50";
             setTimeout(() => {
-                if (juegoActivo) {
+                if (juegoActivo && mensaje.textContent === "¡Comiste! +1 punto 🎉") {
                     mensaje.textContent = "";
-                    mensaje.style.color = "";
                 }
             }, 1000);
         }
         
-        // Verificar si el puntaje llega a 6
+        // 4. Verificar victoria
         if (puntaje >= 6) {
             victoria();
             return true;
         }
         
-        // Redibujar todo con la nueva posición de la comida
+        // 5. Redibujar
         limpiarCanva();
         graficarGato();
         graficarComida();
@@ -235,9 +188,8 @@ function moverIzquierda() {
     if (!juegoActivo) return;
     
     gatoX -= VELOCIDAD;
-    if (gatoX < 0) {
-        gatoX = 0;
-    }
+    if (gatoX < 0) gatoX = 0;
+    
     limpiarCanva();
     graficarGato();
     graficarComida();
@@ -248,9 +200,8 @@ function moverDerecha() {
     if (!juegoActivo) return;
     
     gatoX += VELOCIDAD;
-    if (gatoX > canvas.width - ANCHO_GATO) {
-        gatoX = canvas.width - ANCHO_GATO;
-    }
+    if (gatoX > canvas.width - ANCHO_GATO) gatoX = canvas.width - ANCHO_GATO;
+    
     limpiarCanva();
     graficarGato();
     graficarComida();
@@ -261,9 +212,8 @@ function moverArriba() {
     if (!juegoActivo) return;
     
     gatoY -= VELOCIDAD;
-    if (gatoY < 0) {
-        gatoY = 0;
-    }
+    if (gatoY < 0) gatoY = 0;
+    
     limpiarCanva();
     graficarGato();
     graficarComida();
@@ -274,22 +224,83 @@ function moverAbajo() {
     if (!juegoActivo) return;
     
     gatoY += VELOCIDAD;
-    if (gatoY > canvas.height - ALTO_GATO) {
-        gatoY = canvas.height - ALTO_GATO;
-    }
+    if (gatoY > canvas.height - ALTO_GATO) gatoY = canvas.height - ALTO_GATO;
+    
     limpiarCanva();
     graficarGato();
     graficarComida();
     detectarColision();
 }
 
-//  función iniciarJuego
-function iniciarJuego() {
-    // Gato centrado
+// ============================================
+// FUNCIÓN REINICIAR (CORREGIDA)
+// ============================================
+
+function reiniciarJuego() {
+    console.log("=== REINICIANDO JUEGO ===");
+    
+    // Detener intervalo actual
+    if (intervalo) {
+        clearInterval(intervalo);
+        intervalo = null;
+    }
+    
+    // Reiniciar variables
+    puntaje = 0;
+    tiempo = 10;
+    juegoActivo = true;
+    
+    // Posicionar gato en centro
     gatoX = (canvas.width / 2) - (ANCHO_GATO / 2);
     gatoY = (canvas.height / 2) - (ALTO_GATO / 2);
     
-    // Comida en posición aleatoria
+    // Posicionar comida aleatoriamente
+    generarPosicionAleatoriaComida();
+    
+    // Actualizar pantalla
+    actualizarPuntaje();
+    actualizarTiempo();
+    
+    // Limpiar mensaje
+    let mensajeSpan = document.getElementById("mensaje");
+    if (mensajeSpan) {
+        mensajeSpan.textContent = "";
+        mensajeSpan.style.color = "";
+        mensajeSpan.style.fontSize = "";
+    }
+    
+    // Habilitar botones de movimiento
+    btnArriba.disabled = false;
+    btnIzquierda.disabled = false;
+    btnAbajo.disabled = false;
+    btnDerecha.disabled = false;
+    
+    // Redibujar
+    limpiarCanva();
+    graficarGato();
+    graficarComida();
+    
+    // Iniciar nuevo intervalo
+    intervalo = setInterval(restarTiempo, 1000);
+    
+    console.log("Gato en: X=" + gatoX + ", Y=" + gatoY);
+    console.log("Comida en: X=" + comidaX + ", Y=" + comidaY);
+    console.log("Puntaje: " + puntaje);
+    console.log("Tiempo: " + tiempo);
+}
+
+// ============================================
+// FUNCIÓN INICIAR JUEGO
+// ============================================
+
+function iniciarJuego() {
+    console.log("=== INICIANDO JUEGO ===");
+    
+    // Posicionar gato en centro
+    gatoX = (canvas.width / 2) - (ANCHO_GATO / 2);
+    gatoY = (canvas.height / 2) - (ALTO_GATO / 2);
+    
+    // Posicionar comida aleatoriamente
     generarPosicionAleatoriaComida();
     
     // Reiniciar variables
@@ -305,30 +316,31 @@ function iniciarJuego() {
     let mensaje = document.getElementById("mensaje");
     if (mensaje) {
         mensaje.textContent = "";
-        mensaje.style.color = "";
     }
     
     // Habilitar botones
-    habilitarBotonesMovimiento(true);
-    
-    // Limpiar canvas antes de dibujar
-    limpiarCanva();
+    btnArriba.disabled = false;
+    btnIzquierda.disabled = false;
+    btnAbajo.disabled = false;
+    btnDerecha.disabled = false;
     
     // Dibujar
+    limpiarCanva();
     graficarGato();
     graficarComida();
     
-    // Detener intervalo anterior si existe
+    // Iniciar intervalo
     if (intervalo) {
         clearInterval(intervalo);
     }
-    
-    // Usar setInterval para ejecutar restarTiempo cada segundo
     intervalo = setInterval(restarTiempo, 1000);
+    
+    console.log("Gato en: X=" + gatoX + ", Y=" + gatoY);
+    console.log("Comida en: X=" + comidaX + ", Y=" + comidaY);
 }
 
 // ============================================
-// CONFIGURACIÓN DE EVENTOS DE BOTONES
+// CONFIGURACIÓN DE EVENTOS
 // ============================================
 
 btnIzquierda.onclick = () => moverIzquierda();
@@ -337,5 +349,5 @@ btnArriba.onclick = () => moverArriba();
 btnAbajo.onclick = () => moverAbajo();
 btnReiniciar.onclick = () => reiniciarJuego();
 
-// Iniciar el juego cuando carga la página
+// Iniciar el juego
 iniciarJuego();
