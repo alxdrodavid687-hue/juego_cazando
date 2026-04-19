@@ -43,7 +43,7 @@ function limpiarCanva() {
 
 // graficarGato
 function graficarGato() {
-    graficarRectangulo(gatoX, gatoY, ANCHO_GATO, ALTO_GATO, "#be1c1c");
+    graficarRectangulo(gatoX, gatoY, ANCHO_GATO, ALTO_GATO, "#770b0b");
 }
 
 // graficarComida

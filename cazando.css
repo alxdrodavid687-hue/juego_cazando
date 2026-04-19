@@ -31,6 +31,7 @@
 body {
   font-family: 'Rajdhani', 'MedievalSharp', monospace;
   min-height: 100vh;
+  color: rgb#b95d12;
   position: relative;
   overflow-x: hidden;
 }
