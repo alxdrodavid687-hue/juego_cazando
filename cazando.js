@@ -26,7 +26,7 @@ let gatoY = 0;
 let comidaX = 0;
 let comidaY = 0;
 let puntaje = 0;
-let tiempo = 40;
+let tiempo = 15;
 let intervalo = null;
 let juegoActivo = true;
 
@@ -247,7 +247,7 @@ function reiniciarJuego() {
     
     // Reiniciar variables
     puntaje = 0;
-    tiempo = 40;
+    tiempo = 15;
     juegoActivo = true;
     
     // Posicionar gato en centro
@@ -305,7 +305,7 @@ function iniciarJuego() {
     
     // Reiniciar variables
     puntaje = 0;
-    tiempo = 40;
+    tiempo = 15;
     juegoActivo = true;
     
     // Actualizar pantalla
